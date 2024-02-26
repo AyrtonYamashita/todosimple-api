@@ -2,17 +2,18 @@ package com.ayrtonyamashita.todosimple.models;
 
 import java.util.Objects;
 
-import org.antlr.v4.runtime.misc.ObjectEqualityComparator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = User.TABLE_NAME)
@@ -37,6 +38,8 @@ public class User {
     @Size(groups = CreateUser.class, min = 2, max = 100)
     private String username;
 
+
+    @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password", length = 60, nullable = false)
     @NotNull(groups = { CreateUser.class, UpdateUser.class })
     @NotEmpty(groups = { CreateUser.class, UpdateUser.class })
