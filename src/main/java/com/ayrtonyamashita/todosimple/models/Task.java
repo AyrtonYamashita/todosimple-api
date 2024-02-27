@@ -37,6 +37,12 @@ public class Task {
     public Task() {
     }
 
+    public Task(Long id, User user, String description){
+        this.id = id;
+        this.user = user;
+        this.description = description;
+    }
+
     public Long getId() {
         return this.id;
     }
@@ -61,6 +67,21 @@ public class Task {
         this.description = description;
     }
 
+    public Task id(Long id){
+        setId(id);
+        return this;
+    }
+
+    public Task user(User user){
+        setUser(user);
+        return this;
+    }
+
+    public Task description(String description){
+        setDescription(description);
+        return this;
+    }
+
         @Override
     public boolean equals(Object obj) {
         if (obj == this)
@@ -71,7 +92,8 @@ public class Task {
             return false;
         Task other = (Task) obj;
         if (this.id == null)
-            return false;
+            if (other.id != null)
+                return false;
         else if (!this.id.equals(other.id))
             return false;
 
