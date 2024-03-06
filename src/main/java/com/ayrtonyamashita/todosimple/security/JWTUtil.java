@@ -1,6 +1,5 @@
 package com.ayrtonyamashita.todosimple.security;
 
-
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,43 +14,42 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JWTUtil {
-    
+
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expirarion}")
+    @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(String username){
+    public String generateToken(String username) {
         SecretKey key = getKeyBSecretKey();
         return Jwts.builder()
-            .setSubject(username)
-            .setExpiration(new Date(System.currentTimeMillis() + this.expiration))
-            .signWith(key)
-            .compact();
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + this.expiration))
+                .signWith(key)
+                .compact();
     }
 
-
-    private SecretKey getKeyBSecretKey(){
+    private SecretKey getKeyBSecretKey() {
         SecretKey key = Keys.hmacShaKeyFor(this.secret.getBytes());
         return key;
     }
 
-    public boolean isValidToken(String token){
+    public boolean isValidToken(String token) {
         Claims claims = getClaims(token);
-        if(Objects.nonNull(claims)){
+        if (Objects.nonNull(claims)) {
             String username = claims.getSubject();
             Date expirationDate = claims.getExpiration();
             Date now = new Date(System.currentTimeMillis());
 
-            if(Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate))
+            if (Objects.nonNull(username) && Objects.nonNull(expirationDate) && now.before(expirationDate))
                 return true;
         }
         return false;
 
     }
 
-    private Claims getClaims(String token){
+    private Claims getClaims(String token) {
         SecretKey key = getKeyBSecretKey();
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
