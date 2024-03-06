@@ -30,7 +30,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.context.annotation.Profile;
 
 @Entity
 @Table(name = User.TABLE_NAME)
