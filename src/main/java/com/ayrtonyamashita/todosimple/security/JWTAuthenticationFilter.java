@@ -44,14 +44,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Authentication authentication = this.authenticationManager.authenticate(authToken);
             return authentication;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException();
         }
     }
 
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain, Authentication authentication) throws IOException, ServletException {
 
-        UserSpringSecurity userSpringSecurity = ((UserSpringSecurity) authentication.getPrincipal());
+        UserSpringSecurity userSpringSecurity = (UserSpringSecurity) authentication.getPrincipal();
         String username = userSpringSecurity.getUsername();
         String token = this.jwtUtil.generateToken(username);
         response.addHeader("Authorization", "Bearer " + token);
