@@ -132,7 +132,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
             AuthenticationException exception) throws IOException, ServletException {
 
 
-        Integer status = HttpStatus.FORBIDDEN.value();
+        Integer status = HttpStatus.UNAUTHORIZED.value();
         response.setStatus(status);
         response.setContentType("application/json");
         ErrorResponse errorResponse = new ErrorResponse(status, "Email ou senha invalidos");
