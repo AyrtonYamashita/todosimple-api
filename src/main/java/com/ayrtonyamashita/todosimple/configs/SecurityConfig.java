@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ayrtonyamashita.todosimple.security.JWTAuthenticationFilter;
@@ -25,7 +26,7 @@ import com.ayrtonyamashita.todosimple.security.JWTUtil;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig {
+public class SecurityConfig{
 
         private AuthenticationManager authenticationManager;
 
@@ -38,7 +39,6 @@ public class SecurityConfig {
         private static final String[] PUBLIC_MATCHERS = {
                         "/"
         };
-
         private static final String[] PUBLIC_MATCHERS_POST = {
                         "/user",
                         "/login"
@@ -46,6 +46,7 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
                 http.cors().and().csrf().disable();
 
                 AuthenticationManagerBuilder authenticationManagerBuilder = http
@@ -54,8 +55,10 @@ public class SecurityConfig {
                                 .passwordEncoder(bCryptPasswordEncoder());
                 this.authenticationManager = authenticationManagerBuilder.build();
 
-                http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-                                .antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and()
+                http.authorizeRequests()
+                                .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
+                                .antMatchers(PUBLIC_MATCHERS).permitAll()
+                                .anyRequest().authenticated().and()
                                 .authenticationManager(authenticationManager);
 
                 http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
@@ -65,20 +68,20 @@ public class SecurityConfig {
                 http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
                 return http.build();
-
         }
 
         @Bean
-        CorsConfiguration corsConfiguration() {
+        CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
                 configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE"));
                 final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
-                return configuration;
+                return source;
         }
 
         @Bean
         public BCryptPasswordEncoder bCryptPasswordEncoder() {
                 return new BCryptPasswordEncoder();
         }
+
 }

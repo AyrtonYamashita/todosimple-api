@@ -18,7 +18,6 @@ import com.ayrtonyamashita.todosimple.exceptions.GlobalExceptionHandler;
 import com.ayrtonyamashita.todosimple.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
@@ -26,7 +25,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private JWTUtil jwtUtil;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
-
         setAuthenticationFailureHandler(new GlobalExceptionHandler());
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
@@ -48,9 +46,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain, Authentication authentication) throws IOException, ServletException {
-
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+            HttpServletResponse response, FilterChain filterChain, Authentication authentication)
+            throws IOException, ServletException {
         UserSpringSecurity userSpringSecurity = (UserSpringSecurity) authentication.getPrincipal();
         String username = userSpringSecurity.getUsername();
         String token = this.jwtUtil.generateToken(username);

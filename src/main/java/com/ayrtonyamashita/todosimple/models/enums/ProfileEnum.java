@@ -22,9 +22,9 @@ public enum ProfileEnum {
         for (ProfileEnum x : ProfileEnum.values()) {
             if (code.equals(x.getCode()))
                 return x;
-
         }
 
         throw new IllegalArgumentException("Invalid code: " + code);
     }
+
 }

@@ -73,7 +73,7 @@ public class User {
     private List<Task> tasks = new ArrayList<Task>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @JsonProperty(access = Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @CollectionTable(name = "user_profile")
     @Column(name = "profile", nullable = false)
     private Set<Integer> profiles = new HashSet<>();
