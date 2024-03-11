@@ -26,7 +26,7 @@ import com.ayrtonyamashita.todosimple.security.JWTUtil;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig{
+public class SecurityConfig {
 
         private AuthenticationManager authenticationManager;
 
@@ -55,10 +55,10 @@ public class SecurityConfig{
                                 .passwordEncoder(bCryptPasswordEncoder());
                 this.authenticationManager = authenticationManagerBuilder.build();
 
-                http.authorizeRequests()
+                http.authorizeRequests(requests -> requests
                                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                                 .antMatchers(PUBLIC_MATCHERS).permitAll()
-                                .anyRequest().authenticated().and()
+                                .anyRequest().authenticated())
                                 .authenticationManager(authenticationManager);
 
                 http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
