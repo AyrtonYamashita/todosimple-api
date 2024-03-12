@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/task/user/1"
+const tasksEndpoint = "http://localhost:8080/task/user"
 
 function hideLoading(){
     document.getElementById("loading").style.display = "none"
@@ -28,18 +28,24 @@ function show (tasks){
 
 }
 
-async function getAPI(url){
-    const response = await fetch(url, {method: "GET"})
-    
-    var data = await response.json()
-    console.log(data)
+async function getTasks(){
+    let key = "Authorization"
+    const response = await fetch(tasksEndpoint, {
+        method: "GET",
+        headers: new Headers({
+            Authorization: localStorage.getItem(key),
+        }),
+    });
 
-    if(response){
-        hideLoading()
-    }
-    show(data)
-
-
+    var data = await response.json();
+    console.log(data);
+    if(response) hideLoading();
+    show(data);
 }
 
-getAPI(url)
+document.addEventListener("DOMContentLoaded", function (event) {
+    if(!localStorage.getItem("Authorization"))
+        window.location = "/view/login.html"
+});
+
+getTasks();
