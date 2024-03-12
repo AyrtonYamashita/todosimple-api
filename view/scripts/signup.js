@@ -4,12 +4,9 @@ async function signUp() {
     let confirm_password = document.getElementById("confirm-password")
 
     if (password.value != confirm_password.value) {
-        confirm_password.setCustomValidity("As senhas precisam ser iguais!");
-        confirm_password.reportValidity();
+        showToast("#validToast")
         return false;
     } else {
-        console.log(username.value, password.value, confirm_password.value)
-
         const response = await fetch("http://localhost:8080/user", {
             method: "POST",
             headers: new Headers({
@@ -17,17 +14,26 @@ async function signUp() {
                 Accept: "application/json",
             }),
             body: JSON.stringify({
-                username: password.value,
+                username: username.value,
                 password: confirm_password.value,
             }),
         });
 
-        if(response.ok){
-            showToast("#okToast");
-        }else{
-            showToast("#errotToast");
+        switch (response.status) {
+            case 409:
+                showToast("#conflitToast")
+                break;
+            case 201:
+                showToast("#okToast")
+                window.setTimeout(function () {
+                    window.location = "/view/login.html";
+                }, 1000);
+                break;
+            default:
+                showToast("#errorToast")
+                break;
         }
-        return true;
+
     }
 
 }
@@ -35,7 +41,7 @@ async function signUp() {
 function showToast(id) {
     var toastElList = [].slice.call(document.querySelectorAll(id));
     var toastList = toastElList.map(function (toastEl) {
-      return new bootstrap.Toast(toastEl);
+        return new bootstrap.Toast(toastEl);
     });
     toastList.forEach((toast) => toast.show());
-  }
+}

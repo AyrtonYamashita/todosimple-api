@@ -8,8 +8,6 @@ function show (tasks){
     let tab = `<thead>
         <th scope="col">#</th>
         <th scope="col">Description</th>
-        <th scope="col">Username</th>
-        <th scope="col">UID</th>
     </thead>
     `
 
@@ -18,8 +16,6 @@ function show (tasks){
             <tr>
                 <td scope="row">${task.id}</td>
                 <td>${task.description}</td>
-                <td>${task.user.username}</td>
-                <td>${task.user.id}</td>
             <tr>
         `
     }
@@ -47,5 +43,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     if(!localStorage.getItem("Authorization"))
         window.location = "/view/login.html"
 });
+
 
 getTasks();

@@ -16,17 +16,37 @@
             <strong class="me-auto">Success</strong>
             <button type="button" class="btn_close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body">
-            Successfully registred user.
-        </div>
-        <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Error</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">Error when creating a new user.</div>
-        </div>
+        <div class="toast-body">Successfully registred user.</div>
     </div>
+
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Error</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+            </button>
+        </div>
+        <div class="toast-body">Error when creating a new user.</div>
+    </div>
+    
+    <div id="conflitToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Error</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+            </button>
+        </div>
+        <div class="toast-body">This username already exists.</div>
+    </div>
+
+    <div id="validToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Error</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+            </button>
+        </div>
+        <div class="toast-body">Passwords does not match</div>
+    </div>
+
+
     <div class="vh-100 d-flex justify-content-center align-items-center">
         <div class="container">
             <div class="row d-flex justify-content-center">
@@ -37,7 +57,14 @@
                                 <h2 class="fw-bold mb-2 text-uppercase">
                                     To-Do Simple App - SignUp
                                 </h2>
-                                <p class="mb-2">Please enter your username and password to create your account!</p>
+                                <p class="mb-2">
+                                    Please enter your username and password to create your account!
+                                    <p class="mb-2 text-muted">
+                                        - Password must be at least 8 characters long.
+                                        <br>
+                                        - Password can contain letter, numbers and punctuation.
+                                    </p>
+                                </p>
                                 <div class="mb-3">
                                     <label class="form-label">Username</label>
                                     <input type="text" class="form-control" required="true" id="username">
@@ -58,8 +85,7 @@
                                 </div>
                             </form>
                             <div>
-                                <p class="mb-0 text-center">Already have an account?</p>
-                                <a href="login.html" class="text-primary fw-bold">Sign In</a>
+                                <a href="login.html" class="text-muted text-decoration-none"><p class="mb-0 text-center">Already have an account? Sign In</p></a>
                             </div>
                         </div>
                     </div>

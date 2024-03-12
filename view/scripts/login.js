@@ -15,19 +15,20 @@ async function login(){
         }),
     });
 
-    let key = "Authorization";
-    let token = response.headers.get(key);
-    window.localStorage.setItem(key, token)
-
-    if (response.ok){
-        showToast("okToast");
+    if(response.status == 200){
+        showToast("#okToast")
+        let key = "Authorization";
+        let token = response.headers.get(key);
+        window.localStorage.setItem(key, token)
+    
+        window.setTimeout(function () {
+            window.location = "/view/index.html";
+        }, 1000);
     }else{
-        showToast("#errorToast");
+        showToast("#errorToast")
     }
 
-    window.setTimeout(function () {
-        window.location = "/view/index.html";
-    }, 2000);
+
 }
 
 function showToast(id){
