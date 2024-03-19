@@ -1,5 +1,9 @@
 const user_taskEndpoint = "http://localhost:8080/task/user"
 const task_postEndpoint = "http://localhost:8080/task"
+const task_updateEndpoint = "http://localhost:8080/task"
+var key = "Authorization"
+
+
 
 function hideLoading() {
     document.getElementById("loading").style.display = "none"
@@ -39,7 +43,40 @@ function loadStateTask() {
     }
 }
 
+function editTask(id) {
+    const task_content = document.getElementById(id)
+    const input_task = document.getElementById("description_t")
+    const btn_edit = document.getElementById("btn-function")
+    input_task.value = task_content.textContent
+    btn_edit.textContent = "Edit"
+    btn_edit.setAttribute("class", "btn btn-outline-primary rounded-0")
+    btn_edit.setAttribute("onclick", `putTask(${id})`)
+}
+
+async function putTask(id) {
+    const btn_edit = document.getElementById("btn-function")
+    const input_task = document.getElementById("description_t")
+    await fetch(`http://localhost:8080/task/${id}`, {
+        method: "PUT",
+        headers: new Headers({
+            Authorization: localStorage.getItem(key),
+            Accept: "application/json",
+            "Content-Type": "application/json; charset=utf8"
+        }),
+        body: JSON.stringify({
+            description: input_task.value
+        })
+    })
+    btn_edit.textContent = "Add"
+    btn_edit.setAttribute("class", "btn btn-outline-success rounded-0")
+    btn_edit.setAttribute("onclick", `addTask()`)
+    input_task.value = ""
+    getTasks();
+}
+
 function show(tasks) {
+    let username = window.localStorage.getItem("user")
+    console.log(username)
     let tab =
         `
         <thead>
@@ -49,8 +86,9 @@ function show(tasks) {
     for (let task of tasks) {
         tab += `
             <tr>
-                <td><input type="checkbox" value=${task.id} onclick="checkBoxSubmit()"></td>
-                <td id=${task.id}>${task.description}</td>
+                <td><input type="checkbox" value=${task.id} onclick="checkBoxSubmit()" id="checkbox_id" class="form-check-input">
+                </td>
+                <td id=${task.id} onclick="editTask(${task.id})">${task.description}</td>
                 <td>
                     <button type="button" class="btn-close float-end" aria-label="Close" onclick="removeTasks(${task.id})"></button>
                 </td>
@@ -58,6 +96,7 @@ function show(tasks) {
         `
     }
     document.getElementById("tasks").innerHTML = tab
+    document.getElementById("username_welcome").innerHTML = `Welcome to your app, ${username}`
     loadStateTask()
     document.getElementById("tasks").addEventListener('change', checkBoxSubmit)
 
@@ -65,7 +104,6 @@ function show(tasks) {
 }
 
 async function getTasks() {
-    let key = "Authorization"
     const response = await fetch(user_taskEndpoint, {
         method: "GET",
         headers: new Headers({
@@ -80,7 +118,6 @@ async function getTasks() {
 }
 
 async function removeTasks(id) {
-    let key = "Authorization"
     await fetch(`http://localhost:8080/task/${id}`, {
         method: "DELETE",
         headers: new Headers({
@@ -93,10 +130,12 @@ async function removeTasks(id) {
 async function addTask() {
     let error_task = document.getElementById("error_add_task")
     let description_task = document.getElementById("description_t")
+    description_task.addEventListener('click', function(){
+        error_task.style.display = "none";
+    })
     if (description_task.value == "") {
         error_task.style.display = "flex"
     } else {
-        let key = "Authorization"
         const response = await fetch(task_postEndpoint, {
             method: "POST",
             headers: new Headers({

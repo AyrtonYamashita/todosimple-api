@@ -52,13 +52,24 @@ public class UserService {
         return obj;
     }
 
+    // @Transactional
+    // public User update(User obj) {
+    //     User newObj = findById(obj.getId());
+    //     newObj.setPassword(obj.getPassword());
+    //     newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
+    //     return newObj;
+    // }
+
     @Transactional
     public User update(User obj) {
-        User newObj = findById(obj.getId());
-        newObj.setPassword(obj.getPassword());
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+        if(Objects.isNull(userSpringSecurity))
+            throw new AuthorizationException("Acesso negado!");
+        User newObj = findById(userSpringSecurity.getId());
         newObj.setPassword(this.bCryptPasswordEncoder.encode(obj.getPassword()));
-        return this.userRepository.save(newObj);
+        return newObj;
     }
+
 
     @Transactional
     public void delete(Long id) {

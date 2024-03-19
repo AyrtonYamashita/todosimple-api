@@ -18,6 +18,7 @@ async function login(){
         let key = "Authorization";
         let token = response.headers.get(key);
         window.localStorage.setItem(key, token)
+        window.localStorage.setItem("user", username)
     
         window.setTimeout(function () {
             window.location = "/view/index.html";
